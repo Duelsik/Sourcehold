@@ -29,7 +29,7 @@ jobs:
           - os: windows-latest
             install_dependencies: "./windows/install-dependencies.ps1"
             artifact_name: "sourcehold-windows"
-            cmake_config: "-DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+            cmake_config: "-DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     
     steps:
     - uses: actions/checkout@v2
