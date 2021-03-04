@@ -27,7 +27,7 @@ jobs:
             artifact_name: "sourcehold-mac-os"
             cmake_config: ""
           - os: windows-latest
-            install_dependencies: "./windows/install-dependencies.ps1"
+            install_dependencies: "./windows/install-dependencies.sh"
             artifact_name: "sourcehold-windows"
             cmake_config: "-DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
     
@@ -37,6 +37,7 @@ jobs:
         submodules: 'true'
       
     - name: Install dependencies
+      shell: bash
       env:
         INSTALL_DEPENDENCIES: ${{ matrix.install_dependencies }}
       # Install all the required dependencies to build Sourcehold
@@ -45,6 +46,7 @@ jobs:
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
+      shell: bash
       run: cmake -E make_directory ${{github.workspace}}/build
 
     - name: Configure CMake
