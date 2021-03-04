@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
             install_dependencies: "sh ./ubuntu/install-dependencies.sh"
@@ -24,9 +24,9 @@ jobs:
           - os: macos-latest
             install_dependencies: "sh ./macos/install-dependencies.sh"
             artifact_name: "sourcehold-mac-os"
-            #    - os: windows-latest
-            #install_dependencies: "cmd ./windows/install-dependencies.bat"
-            #artifact_name: "sourcehold-windows"
+          - os: windows-latest
+            install_dependencies: "./windows/install-dependencies.ps1"
+            artifact_name: "sourcehold-windows"
     
     steps:
     - uses: actions/checkout@v2
@@ -52,7 +52,10 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      os: [macos-latest, ubuntu-latest]
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      os: windows-latest
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=$Env:VCPKG_INSTALLATION_ROOT\scripts\buildsystems\vcpkg.cmake
 
     - name: Build
       working-directory: ${{github.workspace}}/build
