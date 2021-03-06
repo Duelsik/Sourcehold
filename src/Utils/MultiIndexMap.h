@@ -7,11 +7,12 @@ namespace Sourcehold {
         template<
             typename Key,
             typename Value,
+            typename HashingClass = std::hash<Key>,
             template <typename, typename, typename...> typename Aggregator = std::unordered_map
         >
         class MultiIndexMap {
             public:
-            using TypeOfMap = Aggregator<Key, Value>;
+            using TypeOfMap = Aggregator<Key, Value, HashingClass>;
             using Arg = Aggregator<const std::vector<Key>, Value>;
             using ArgReversed = Aggregator<Value, const std::vector<Key>>;
 
@@ -59,5 +60,15 @@ namespace Sourcehold {
         constexpr typename IntermediateType::TypeOfMap createMultiIndexMap(const typename IntermediateType::ArgReversed Config) {
             return IntermediateType(Config).outMap;
         }
+
+        // https://stackoverflow.com/questions/18837857/cant-use-enum-class-as-unordered-map-key
+        struct EnumClassHash
+        {
+            template <typename T>
+            std::size_t operator()(T t) const
+            {
+                return static_cast<std::size_t>(t);
+            }
+        };
     }
 }
