@@ -48,7 +48,7 @@ namespace Sourcehold {
                 };
 
                 // TODO - maybe exclude that into external config or add automatic code generation?
-                const std::unordered_map<EntityType, EntityAsset> EntityTypeToEntityAssetMapping = Utils::createMultiIndexMap<EntityType, EntityAsset>({
+                const std::unordered_map<EntityType, EntityAsset, Utils::EnumClassHash<EntityType>> EntityTypeToEntityAssetMapping = Utils::createMultiIndexMap<EntityType, EntityAsset, Utils::EnumClassHash>({
                     {
                         EntityAsset::LORD, {
                             EntityType::LORD

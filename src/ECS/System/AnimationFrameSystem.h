@@ -149,7 +149,7 @@ namespace Sourcehold {
                     { FrameDataGroup::SHRUB1_RED, { TREE_WIND_FRAMES, NO_OFFSET, WITH_MIRROR, FrameFilter::ODD } }
                 };
 
-                const std::unordered_map<EntityType, FrameDataGroup> EntityTypeToFrameDataGroupMapping = Utils::createMultiIndexMap<EntityType, FrameDataGroup>({
+                const std::unordered_map<EntityType, FrameDataGroup, Utils::EnumClassHash<EntityType>> EntityTypeToFrameDataGroupMapping = Utils::createMultiIndexMap<EntityType, FrameDataGroup, Utils::EnumClassHash>({
                     { FrameDataGroup::TREE_CHESTNUT_XL_FALLING, { EntityType::TREE_CHESTNUT_XL_FALLING } },
                     { FrameDataGroup::TREE_CHESTNUT_XL_RESOURCE, { EntityType::TREE_CHESTNUT_XL_RESOURCE } },
                     { FrameDataGroup::TREE_CHESTNUT_L_FALLING, { EntityType::TREE_CHESTNUT_L_FALLING } },

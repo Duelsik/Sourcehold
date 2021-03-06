@@ -7,14 +7,14 @@ namespace Sourcehold {
         template<
             typename Key,
             typename Value,
-            typename HashingClass = std::hash<Key>,
+            template <typename> typename HashingClass = std::hash,
             template <typename, typename, typename...> typename Aggregator = std::unordered_map
         >
         class MultiIndexMap {
             public:
-            using TypeOfMap = Aggregator<Key, Value, HashingClass>;
-            using Arg = Aggregator<const std::vector<Key>, Value>;
-            using ArgReversed = Aggregator<Value, const std::vector<Key>>;
+            using TypeOfMap = Aggregator<Key, Value, HashingClass<Key>>;
+            using Arg = Aggregator<const std::vector<Key>, Value, HashingClass<std::vector<Key>>>;
+            using ArgReversed = Aggregator<Value, const std::vector<Key>, HashingClass<Value>>;
 
             TypeOfMap outMap;
 
@@ -46,7 +46,8 @@ namespace Sourcehold {
         template<
             typename Key,
             typename Value,
-            typename IntermediateType = MultiIndexMap<Key, Value>
+            template <typename> typename HashingClass = std::hash,
+            typename IntermediateType = MultiIndexMap<Key, Value, HashingClass>
         >
         constexpr typename IntermediateType::TypeOfMap createMultiIndexMap(const typename IntermediateType::Arg Config) {
             return IntermediateType(Config).outMap;
@@ -55,16 +56,18 @@ namespace Sourcehold {
         template<
             typename Key,
             typename Value,
-            typename IntermediateType = MultiIndexMap<Key, Value>
+            template <typename> typename HashingClass = std::hash,
+            typename IntermediateType = MultiIndexMap<Key, Value, HashingClass>
         >
         constexpr typename IntermediateType::TypeOfMap createMultiIndexMap(const typename IntermediateType::ArgReversed Config) {
             return IntermediateType(Config).outMap;
         }
 
         // https://stackoverflow.com/questions/18837857/cant-use-enum-class-as-unordered-map-key
+        template <typename T>
         struct EnumClassHash {
-            template <typename T>
-            std::size_t operator()(T t) const
+            template <typename P = T>
+            std::size_t operator()(P t) const
             {
                 return static_cast<std::size_t>(t);
             }
